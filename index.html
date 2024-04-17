@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My HTML Page</title>
+</head>
+
+<body>
+    <h1 id="h1" class="title">Hello, world!</h1>
+    <p id="h1">This is my HTML page.</p>
+
+    <input type="text" id="task-input" class="input" placeholder="Enter task" />
+
+    <ul id="task">
+
+    </ul>
+
+    <script>
+        // Variable donde tengamos el valor del usuario
+        document.addEventListener("DOMContentLoaded", () => {
+            let tasks = []
+            
+            const ul = document.getElementById('task')
+
+            const renderTasks = (value) => {
+                const newLi = document.createElement('li');
+
+                newLi.textContent = value;
+
+                const deleteBtn = document.createElement('span')
+                deleteBtn.textContent = "✔"
+
+                deleteBtn.addEventListener("dblclick", (e) => {
+                    e.target.parentElement.remove()
+                    tasks.splice(tasks.indexOf(value), 1)
+                    localStorage.setItem("tasks", JSON.stringify(tasks))
+                })
+
+                newLi.appendChild(deleteBtn)
+
+                ul.appendChild(newLi)
+            }
+
+            if (localStorage.getItem("tasks")) {
+                tasks = JSON.parse(localStorage.getItem("tasks"))
+
+                tasks.forEach((task) => {
+                    renderTasks(task)
+                })
+            }
+
+
+            document.addEventListener("keyup", (e) => {
+                if (e.key === "Enter") {
+                    let value = e.target.value;
+
+                    value = value.trim()
+
+                    renderTasks(value)
+
+                    tasks.push(value)
+
+                    localStorage.setItem("tasks", JSON.stringify(tasks))
+
+                    e.target.value = ""
+                }
+            })
+        })
+
+    </script>
+</body>
+
+</html>
